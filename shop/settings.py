@@ -25,7 +25,7 @@ SECRET_KEY = 'lkauhfgiouhLIUGWADUHwadiuuhqaw039or9(*&3*870g-433(fvvztd#av(7!a#76
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['shoppingcart-tluz.onrender.com']
 
 
 # Application definition
