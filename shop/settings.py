@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'lkauhfgiouhLIUGWADUHwadiuuhqaw039or9(*&3*870g-433(fvvztd#av(7!a#767u(5f'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = ['shoppingcart-tluz.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1','shoppingcart-tluz.onrender.com']
 
 
 # Application definition
@@ -139,5 +140,5 @@ MEDIA_ROOT = BASE_DIR / 'static/images'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    # "http://127.0.0.1:3000",
+    "http://127.0.0.1:3000",
 ]
