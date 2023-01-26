@@ -1,6 +1,6 @@
 from django.contrib.auth import login, logout
 from rest_framework import permissions
-from rest_framework import views, status
+from rest_framework import views, status, generics
 from rest_framework.response import Response
 
 
@@ -21,3 +21,19 @@ class LoginView(views.APIView):
        user = serializer.validated_data['user']
        login(request, user)
        return Response(None, status=status.HTTP_202_ACCEPTED)
+
+
+
+class LogoutView(views.APIView):
+    def post(self, request, format=None):
+        logout(request)
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+
+
+
+class ProfileView(generics.RetrieveAPIView):
+    serializer_class = serializers.UserSerializer
+
+    def get_object(self):
+        print(f"self: {self.request.user}")
+        return self.request.user
