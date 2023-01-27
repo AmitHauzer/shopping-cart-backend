@@ -24,9 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = 'RENDER' not in os.environ
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','shoppingcart-tluz.onrender.com']
 
 
 # Application definition
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
@@ -77,6 +79,17 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'shopping_cart_db_4pi1',
+#         'USER': 'shopping_cart_db_user',
+#         'PASSWORD': os.environ['SHOPPING_CART_DB_PASSWORD'],
+#         'HOST': 'dpg-cf7bb39mbjsmch8mpohg-a.frankfurt-postgres.render.com',
+#         'PORT': '5432'
+#     }
+# }
 
 DATABASES = {
     'default': {
@@ -135,10 +148,15 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-MEDIA_ROOT = BASE_DIR / 'static/images'
+# MEDIA_ROOT = BASE_DIR / 'static/images'
+MEDIA_ROOT = BASE_DIR / 'staticfiles/images'
 
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    # "http://127.0.0.1:3000",
+    "http://127.0.0.1:3000",
+    "https://shoppingcart-6lnm.onrender.com",  
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
