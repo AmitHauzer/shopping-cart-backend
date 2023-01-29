@@ -15,8 +15,7 @@ def all_products(request):
         product = Product.objects.all()
         serializer = ProductSerializer(product, many=True)
         return Response(serializer.data)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     # elif request.method == 'POST':
     #     serializer = ProductSerializer(data=request.data)
     #     if serializer.is_valid():
