@@ -20,5 +20,6 @@ from users import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('products/', include('product.urls')),
+    path('cart/', include('cart.urls')),
     path('login/', views.LoginView.as_view()),
 ]
