@@ -13,6 +13,9 @@ class CartSerializer(serializers.ModelSerializer):
 
 # GET:
 class CartItemsSerializer(serializers.ModelSerializer):
+    """
+    Get all the cartitems with specific cart_id
+    """
     product = ProductSerializer()  # nested serializer
 
     class Meta:
@@ -22,7 +25,9 @@ class CartItemsSerializer(serializers.ModelSerializer):
 
 # POST:
 class EditCartItemSerializer(serializers.ModelSerializer):
-
+    """
+    Create or delete item.
+    """
     class Meta:
         model = CartItems
         fields = "__all__"
