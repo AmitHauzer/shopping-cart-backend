@@ -21,7 +21,7 @@ class CartItemsSerializer(serializers.ModelSerializer):
 
 
 # POST:
-class CreateCartItemSerializer(serializers.ModelSerializer):
+class EditCartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CartItems
