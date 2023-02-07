@@ -36,7 +36,7 @@ def get_cart_items(request, cart_pk):
 
 # Add an Item:
 @api_view(['POST'])
-def add_item_to_cart(request, cart_pk):
+def add_item_to_cart(request):
     """
     Post - add an item into CartItems.
     :request: {"product": id, "quantity": id, "cart": id}
@@ -57,7 +57,7 @@ def add_item_to_cart(request, cart_pk):
 
 # Delete an Item.
 @api_view(['DELETE'])
-def delete_item_from_cart(request, cart_pk):
+def delete_item_from_cart(request):
     """
     Delete cart item by id.
     request: {"product": id, "cart": id}
@@ -76,7 +76,7 @@ def delete_item_from_cart(request, cart_pk):
 
 # Update an Item.
 @api_view(['PUT'])
-def update_item_in_cart(request, cart_pk):
+def update_item_in_cart(request):
     """
     Updates quantity and paid status.
     :request: PUT - {"product": 1, "quantity": 1, "paid_status": false, "cart": 1}
