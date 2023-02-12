@@ -33,7 +33,6 @@ def single_product(request, pk):
         product = Product.objects.get(id=pk)
         serializer = ProductSerializer(product)
         return Response(serializer.data)
-    
 
 
 @api_view(['POST'])
@@ -44,4 +43,11 @@ def admin_add_product(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
+@api_view(['GET'])
+def search(request):
+    if request.method == 'GET':
+        product = Product.objects.filter(name__istartswith='test')
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
