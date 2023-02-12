@@ -78,7 +78,8 @@ def delete_item_from_cart(request):
 @api_view(['PUT'])
 def update_item_in_cart(request):
     """
-    Updates quantity and paid status.
+    Updates quantity and paid status. 
+    Works only on paid_status=false items.
     :request: PUT - {"product": 1, "quantity": 1, "paid_status": false, "cart": 1}
     """
     if request.method == 'PUT':
