@@ -23,10 +23,11 @@ class CartItemsSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# POST:
+# POST/PUT:
+# Added value - you don't need to add all the product details. The product ID is enough.
 class EditCartItemSerializer(serializers.ModelSerializer):
     """
-    Create or delete item.
+    Create, update or delete item.
     """
     class Meta:
         model = CartItems

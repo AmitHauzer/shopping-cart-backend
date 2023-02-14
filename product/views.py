@@ -44,7 +44,7 @@ def single_product(request, pk):
 
     if request.method == 'GET':
         serializer = ProductSerializer(product)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'DELETE':
         print('product has been deleted')
@@ -74,5 +74,5 @@ def search(request):
     if request.method == 'GET':
         query = request.GET.get('search')
         product = Product.objects.filter(name__istartswith=query)
-        serializer = ProductSerializer(product)
-        return Response(serializer.data)
+        serializer = ProductSerializer(product, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

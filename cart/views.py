@@ -16,32 +16,28 @@ def cart(request):
     if request.method == 'GET':
         cart = Cart.objects.get(id=1)
         serializer = CartSerializer(cart)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#############################################
 
 
 # CartItems:
 # Get items.
-@api_view(['GET'])
-def get_cart_items(request, cart_pk):
+@api_view(['GET', 'POST'])
+def all_cart_items(request, cart_pk):
     """
     GET - :return: all the items in the cart.
+    Post - add an item into CartItems.
+    :request: {"product": id, "quantity": id, "cart": id}
     """
     if request.method == 'GET':
         cartitems = CartItems.objects.filter(cart=cart_pk, paid_status=False)
         serializer = CartItemsSerializer(cartitems, many=True)
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-# Add an Item:
-@api_view(['POST'])
-def add_item_to_cart(request):
-    """
-    Post - add an item into CartItems.
-    :request: {"product": id, "quantity": id, "cart": id}
-    """
-    if request.method == 'POST':
+    elif request.method == 'POST':
         serializer = EditCartItemSerializer(data=request.data)
         if serializer.is_valid():
             # Checks if the Item already exists.
@@ -52,45 +48,44 @@ def add_item_to_cart(request):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 Exception(f"Item {cartitem} already exists.")
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# Delete an Item.
-@api_view(['DELETE'])
-def delete_item_from_cart(request):
-    """
-    Delete cart item by id.
-    request: {"product": id, "cart": id}
-    """
-    if request.method == 'DELETE':
-        serializer = EditCartItemSerializer(data=request.data)
-        if serializer.is_valid():
-            print(
-                f"DELETE: product={serializer.data.get('product')}, cart={serializer.data.get('cart')}")
-            cartitem = CartItems.objects.filter(
-                product=serializer.data.get('product'), cart=serializer.data.get('cart'), paid_status=False)
-            cartitem.delete()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Update an Item.
-@api_view(['PUT'])
-def update_item_in_cart(request):
+@api_view(['GET', 'PUT', 'DELETE'])
+def single_cartitem(request, cart_pk, product_id):
     """
-    Updates quantity and paid status. 
-    Works only on paid_status=false items.
-    :request: PUT - {"product": 1, "quantity": 1, "paid_status": false, "cart": 1}
+    GET: single item. 
+    PUT - Updates quantity and paid status. Works only on paid_status=false items.
+    :request: PUT - {"quantity": id, "paid_status": true/false}
+    DELETE - Delete cart item by id.
+    :request:
     """
-    if request.method == 'PUT':
+
+    # Get an item:
+    try:
+        cartitem = CartItems.objects.get(
+            product=product_id, cart=cart_pk,  paid_status=False)
+        print(f'CartItem: {cartitem}')
+    except:
+        print('CartItem does not exist')
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = CartItemsSerializer(cartitem)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    elif request.method == 'PUT':
         serializer = EditCartItemSerializer(data=request.data)
         if serializer.is_valid():
-            cartitem = CartItems.objects.get(product=serializer.data.get(
-                'product'), cart=serializer.data.get('cart'), paid_status=False)
             if serializer.validated_data.get('paid_status'):
                 cartitem.paid_status = serializer.data.get('paid_status')
             if serializer.validated_data.get('quantity'):
                 cartitem.quantity = serializer.data.get('quantity')
             cartitem.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+    elif request.method == 'DELETE':
+        print(f"DELETE cartitem: {cartitem}")
+        cartitem.delete()
+        return Response(status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
