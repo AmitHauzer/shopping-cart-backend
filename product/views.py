@@ -72,7 +72,10 @@ def single_product(request, pk):
 @api_view(['GET'])
 def search(request):
     if request.method == 'GET':
+        """
+        search product by name.
+        """
         query = request.GET.get('search')
-        product = Product.objects.filter(name__istartswith=query)
-        serializer = ProductSerializer(product, many=True)
+        products = Product.objects.filter(name__istartswith=query)
+        serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
