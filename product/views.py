@@ -12,7 +12,7 @@ def all_products(request):
     List all code snippets, or create a new snippet.
     """
     if request.method == 'GET':
-        product = Product.objects.all()
+        product = Product.objects.filter(archive=False)
         serializer = ProductSerializer(product, many=True)
         return Response(serializer.data)
 
@@ -36,7 +36,7 @@ def single_product(request, pk):
     """
     # Get the item.
     try:
-        product = Product.objects.get(pk=pk)
+        product = Product.objects.get(pk=pk, archive=False)
         print(f'Product: {product}')
     except Product.DoesNotExist:
         print('The product does not exist')
@@ -47,8 +47,9 @@ def single_product(request, pk):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'DELETE':
-        print('product has been deleted')
-        product.delete()
+        # Archive:
+        product.archive = True
+        product.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'PUT':
@@ -76,6 +77,7 @@ def search(request):
         search product by name.
         """
         query = request.GET.get('search')
-        products = Product.objects.filter(name__istartswith=query)
+        products = Product.objects.filter(
+            name__istartswith=query, archive=False)
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
