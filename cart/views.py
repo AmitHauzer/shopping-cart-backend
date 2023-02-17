@@ -28,7 +28,7 @@ def cart(request):
 def all_cart_items(request, cart_pk):
     """
     GET - :return: all the items in the cart.
-    Post - add an item into CartItems.
+    POST - add an item into CartItems.
     :request: {"product": id, "quantity": id, "cart": id}
     """
     if request.method == 'GET':
