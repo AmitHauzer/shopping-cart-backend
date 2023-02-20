@@ -2,8 +2,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from cart.models import Cart, CartItems
-from cart.serializers import CartSerializer, CartItemsSerializer, EditCartItemSerializer
+from cart.models import Cart, CartItem
+from cart.serializers import CartSerializer, CartItemSerializer, EditCartItemSerializer
 
 
 # Cart:
@@ -24,24 +24,23 @@ def cart(request):
 
 
 # CartItems:
-# Get items.
 @api_view(['GET', 'POST'])
 def all_cart_items(request, cart_pk):
     """
     GET - :return: all the items in the cart.
-    Post - add an item into CartItems.
+    POST - add an item into CartItems.
     :request: {"product": id, "quantity": id, "cart": id}
     """
     if request.method == 'GET':
-        cartitems = CartItems.objects.filter(cart=cart_pk, paid_status=False)
-        serializer = CartItemsSerializer(cartitems, many=True)
+        cartitems = CartItem.objects.filter(cart=cart_pk, paid_status=False)
+        serializer = CartItemSerializer(cartitems, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
         serializer = EditCartItemSerializer(data=request.data)
         if serializer.is_valid():
             # Checks if the Item already exists.
-            cartitem = CartItems.objects.filter(product=serializer.validated_data.get(
+            cartitem = CartItem.objects.filter(product=serializer.validated_data.get(
                 'product'), cart=serializer.validated_data.get('cart'), paid_status=False)
             if not cartitem:
                 serializer.save()
@@ -63,7 +62,7 @@ def single_cartitem(request, cart_pk, product_id):
 
     # Get an item:
     try:
-        cartitem = CartItems.objects.get(
+        cartitem = CartItem.objects.get(
             product=product_id, cart=cart_pk,  paid_status=False)
         print(f'CartItem: {cartitem}')
     except:
@@ -71,7 +70,7 @@ def single_cartitem(request, cart_pk, product_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = CartItemsSerializer(cartitem)
+        serializer = CartItemSerializer(cartitem)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'PUT':

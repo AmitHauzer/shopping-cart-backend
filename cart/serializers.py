@@ -1,8 +1,6 @@
 from rest_framework import serializers
-from product.models import Product
-
 from product.serializers import ProductSerializer
-from .models import Cart, CartItems
+from .models import Cart, CartItem
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -12,14 +10,14 @@ class CartSerializer(serializers.ModelSerializer):
 
 
 # GET:
-class CartItemsSerializer(serializers.ModelSerializer):
+class CartItemSerializer(serializers.ModelSerializer):
     """
     Get all the cartitems with specific cart_id
     """
     product = ProductSerializer()  # nested serializer
 
     class Meta:
-        model = CartItems
+        model = CartItem
         fields = "__all__"
 
 
@@ -30,5 +28,5 @@ class EditCartItemSerializer(serializers.ModelSerializer):
     Create, update or delete item.
     """
     class Meta:
-        model = CartItems
+        model = CartItem
         fields = "__all__"
