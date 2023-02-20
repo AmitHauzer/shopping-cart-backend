@@ -27,7 +27,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # DEBUG = 'RENDER' not in os.environ
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','shoppingcart-tluz.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'shoppingcart-tluz.onrender.com']
 
 
 # Application definition
@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'product',
+    'cart',
+    'orders',
     'rest_framework',
     "corsheaders",
 ]
@@ -148,6 +150,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+
 # MEDIA_ROOT = BASE_DIR / 'static/images'
 MEDIA_ROOT = BASE_DIR / 'staticfiles/images'
 
@@ -155,8 +158,18 @@ MEDIA_ROOT = BASE_DIR / 'staticfiles/images'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://shoppingcart-6lnm.onrender.com",  
+    "https://shoppingcart-6lnm.onrender.com",
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        #    'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
