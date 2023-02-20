@@ -10,7 +10,8 @@ from orders.serializers import OrderSerializer
 @api_view(['GET', 'POST'])
 def order(request, cart_pk):
     """
-
+    GET - gets all the orders, filter by cart ID.
+    POST - Creates a new order with all current cart items.
     """
     if request.method == 'GET':
         orders = Order.objects.filter(cart=cart_pk)
